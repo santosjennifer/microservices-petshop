@@ -24,17 +24,25 @@ import com.petshop.payload.PersonResponse;
 import com.petshop.payload.PersonResponseDetails;
 import com.petshop.service.PersonService;
 
+import io.swagger.v3.oas.annotations.OpenAPIDefinition;
+import io.swagger.v3.oas.annotations.info.Info;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/api/person")
+@Tag(name = "Person")
+@OpenAPIDefinition(info = @Info(title = "Person API", version = "v1.0", description = "Documentation of Person API"))
 public class PersonController {
 	
 	@Autowired
 	private PersonService service;
 	
+	@Value("${server.port}") 
+	private String port;
+	
 	@GetMapping("/status")
-	public ResponseEntity<ResponseBody> statusService(@Value("${local.server.port}") String port) {
+	public ResponseEntity<ResponseBody> statusService() {
         String message =  String.format("Serviço ativo e executando na porta %s", port);
         ResponseBody response = new ResponseBody(message);
         

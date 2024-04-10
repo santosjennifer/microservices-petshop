@@ -24,17 +24,25 @@ import com.petshop.payload.AnimalRequest;
 import com.petshop.payload.AnimalResponse;
 import com.petshop.service.AnimalService;
 
+import io.swagger.v3.oas.annotations.OpenAPIDefinition;
+import io.swagger.v3.oas.annotations.info.Info;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/api/animal")
+@Tag(name = "Animal")
+@OpenAPIDefinition(info = @Info(title = "Animal API", version = "v1.0", description = "Documentation of Animal API"))
 public class AnimalController {
 	
 	@Autowired
 	private AnimalService service;
 	
+	@Value("${server.port}") 
+	private String port;
+	
 	@GetMapping("/status")
-	private ResponseEntity<ResponseBody> statusService(@Value("${local.server.port}") String port) {
+	private ResponseEntity<ResponseBody> statusService() {
 		String message =  String.format("Serviço ativo e executando na porta %s", port);
 		ResponseBody response = new ResponseBody(message);
 		
