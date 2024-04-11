@@ -1,7 +1,7 @@
-### Repositório com os serviços do eureka-server, zuul-server, ms-pet e ms-person
+### Repositório com os serviços eureka-server, gateway-server, ms-pet e ms-person
 
 ### Eureka Server
-![image](https://github.com/santosjennifer/microservices-petshop/assets/90192611/a4e911f1-60e5-42d6-91ef-f6d8220a3f0b)
+![image](https://github.com/santosjennifer/microservices-petshop/assets/90192611/607d02e5-eddd-4ad4-a1b0-ce1520c3a7fe)
 
 ### Swagger Person API
 ![image](https://github.com/santosjennifer/microservices-petshop/assets/90192611/9ec9019c-a85f-49df-96b6-86cd8dbd12a1)
