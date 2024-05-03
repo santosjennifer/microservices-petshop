@@ -6,7 +6,7 @@
 - **gateway-server:** responsável gerenciar as rotas do API Gateway.
 - **ms-pet:** responsável por cadastrar e retornar os pets/animais e vincular aos tutores/pessoas.
 - **ms-person:** responsável por cadastrar e retornar as pessoas/tutores dos pets.
-- 
+  
 ### Principais ferramentas
 
 - Java 21
