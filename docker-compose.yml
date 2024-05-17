@@ -1,0 +1,86 @@
+version: '3.8'
+
+services:
+  mongo:
+    image: mongo
+    restart: always
+    ports:
+      - 27017:27017
+    networks:
+      - petshop-network
+
+  mongo-express:
+    image: mongo-express
+    restart: always
+    ports:
+      - 8081:8081
+    environment:
+      ME_CONFIG_MONGODB_ADMINUSERNAME: root
+      ME_CONFIG_MONGODB_ADMINPASSWORD: root
+      ME_CONFIG_MONGODB_URL: mongodb://root:root@mongo:27017/
+      ME_CONFIG_BASICAUTH: false
+    depends_on:
+      - mongo
+    networks:
+      - petshop-network
+
+  eureka:
+    restart: always
+    build:
+      context: .
+      dockerfile: eureka-server/Dockerfile
+    ports:
+      - 8761:8761
+    networks:
+      - petshop-network
+      
+  gateway:
+    restart: always
+    build:
+      context: .
+      dockerfile: gateway-server/Dockerfile
+    ports:
+      - 8799:8799
+    environment:  
+      EUREKA.CLIENT.SERVICEURL.DEFAULTZONE: http://eureka:8761/eureka
+    depends_on:
+      - mongo
+      - eureka
+    networks:
+      - petshop-network
+
+  ms-pet:
+    restart: always
+    build:
+      context: .
+      dockerfile: ms-pet/Dockerfile
+    ports:
+      - 8001:8001
+    environment:  
+      EUREKA.CLIENT.SERVICEURL.DEFAULTZONE: http://eureka:8761/eureka
+      SPRING.DATA.MONGODB.URI: mongodb://mongo:27017/petshop
+    depends_on:
+      - mongo
+      - eureka
+    networks:
+      - petshop-network
+      
+  ms-person:
+    restart: always
+    build:
+      context: .
+      dockerfile: ms-person/Dockerfile
+    ports:
+      - 8031:8031
+    environment:  
+      EUREKA.CLIENT.SERVICEURL.DEFAULTZONE: http://eureka:8761/eureka
+      SPRING.DATA.MONGODB.URI: mongodb://mongo:27017/petshop
+    depends_on:
+      - mongo
+      - eureka
+    networks:
+      - petshop-network
+
+networks:
+  petshop-network:
+    driver: bridge
