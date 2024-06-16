@@ -1,5 +1,9 @@
 ![Last Commit](https://img.shields.io/github/last-commit/santosjennifer/microservices-petshop)
 
+## Plataforma para Petshop
+
+Responsável por cadastrar animais e tutores
+
 ### Repositório com os serviços eureka-server, gateway-server, ms-pet e ms-person
 
 - **eureka-server:** responsável por registrar e gerenciar a comunicação dos demais microserviços (gateway-server, ms-person e ms-pet).
