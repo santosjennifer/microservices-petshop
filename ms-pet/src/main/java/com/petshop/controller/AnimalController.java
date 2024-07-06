@@ -1,7 +1,7 @@
 package com.petshop.controller;
 
+import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -54,7 +54,7 @@ public class AnimalController {
 		List<AnimalDto> dtos = service.findAll();
 		
 		if (dtos.isEmpty()) {
-			 return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+			return ResponseEntity.ok(Collections.emptyList());
 		}
 		
 		List<AnimalResponse> response = dtos.stream()
@@ -66,13 +66,9 @@ public class AnimalController {
 	
 	@GetMapping("/{id}")
 	public ResponseEntity<AnimalResponse> findById(@PathVariable String id){
-		Optional<AnimalDto> dto = service.findById(id);
+		AnimalDto dto = service.findById(id);
 		
-		if (dto.isPresent()) {
-			return new ResponseEntity<>(convertDtoToResponse(dto.get()), HttpStatus.OK);
-		}
-		
-		return new ResponseEntity<>(HttpStatus.NO_CONTENT);	
+		return new ResponseEntity<>(convertDtoToResponse(dto), HttpStatus.OK);
 	}
 	
 	@GetMapping("/{guardianId}/list")
@@ -80,7 +76,7 @@ public class AnimalController {
 		List<AnimalDto> dtos = service.findByGuardian(guardianId);
 		
 		if (dtos.isEmpty()) {
-			return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+			return ResponseEntity.ok(Collections.emptyList());
 		}
 		
 		List<AnimalResponse> response = dtos.stream()

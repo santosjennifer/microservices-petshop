@@ -7,6 +7,8 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
+import com.petshop.exception.PersonCannotDeletedException;
+import com.petshop.exception.PersonNotFoundException;
 import com.petshop.exception.ResponseBody;
 
 import feign.FeignException;
@@ -23,6 +25,18 @@ public class PersonExceptionsHandler {
         ResponseBody response = new ResponseBody(errorMessage);
         return new ResponseEntity<>(response, HttpStatus.UNPROCESSABLE_ENTITY);
     }
+    
+	@ExceptionHandler(PersonNotFoundException.class)
+	public ResponseEntity<ResponseBody> handlePersonNotFoundException(PersonNotFoundException ex) {
+		ResponseBody response = new ResponseBody(ex.getMessage());
+		return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
+	}
+	
+	@ExceptionHandler(PersonCannotDeletedException.class)
+	public ResponseEntity<ResponseBody> handlePersonCannotDeleted(PersonCannotDeletedException ex) {
+		ResponseBody response = new ResponseBody(ex.getMessage());
+		return new ResponseEntity<>(response, HttpStatus.UNPROCESSABLE_ENTITY);
+	}
     
 	@ExceptionHandler({ FeignException.ServiceUnavailable.class })
 	public ResponseEntity<ResponseBody> handleFeignServiceUnavailable() {

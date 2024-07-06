@@ -1,15 +1,17 @@
 package com.petshop.service.impl;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.petshop.client.AnimalClient;
 import com.petshop.dto.AnimalDto;
 import com.petshop.dto.PersonDto;
+import com.petshop.exception.PersonCannotDeletedException;
+import com.petshop.exception.PersonNotFoundException;
 import com.petshop.model.Person;
 import com.petshop.repository.PersonRepository;
 import com.petshop.service.PersonService;
@@ -24,36 +26,43 @@ public class PersonServiceImpl implements PersonService {
 	private AnimalClient animalClient;
 
 	@Override
+	@Transactional
 	public PersonDto create(PersonDto personDto) {
 		return salvePerson(personDto);
 	}
 
 	@Override
+	@Transactional
 	public PersonDto update(String id, PersonDto personDto) {
 		personDto.setId(id);
 		return salvePerson(personDto);
 	}
 
 	@Override
+	@Transactional
 	public void remove(String id) {
-		repository.deleteById(id);
+		Person person = repository.findById(id)
+                .orElseThrow(() -> new PersonNotFoundException(id));
 		
+		List<AnimalDto> listAnimals = animalClient.findAnimals(person.getId());
+		
+		if (!listAnimals.isEmpty()) {
+			throw new PersonCannotDeletedException();
+		}
+		
+		repository.deleteById(id);
 	}
 
 	@Override
-	public Optional<PersonDto> findPersonById(String id) {
-		Optional<Person> person = repository.findById(id);
-		
-		if(person.isPresent()) {
-			PersonDto dto = convertEntityToDto(person.get());
-			
-			List<AnimalDto> animals = animalClient.findAnimals(id);
-			dto.setAnimals(animals);
-			
-			return Optional.of(dto);
-		}
-		
-		return Optional.empty();
+	public PersonDto findPersonById(String id) {
+	    PersonDto dto = repository.findById(id)
+	                                     .map(this::convertEntityToDto)
+	                                     .orElseThrow(() -> new PersonNotFoundException(id));
+	    
+	    List<AnimalDto> animals = animalClient.findAnimals(id);
+	    dto.setAnimals(animals);
+	    
+	    return dto;
 	}
 
 	@Override
@@ -68,23 +77,24 @@ public class PersonServiceImpl implements PersonService {
 	private Person convertDtoToEntity(PersonDto dto) {
 		Person entity = new Person();
 		entity.setId(dto.getId());
-		entity.setFirstName(dto.getFirstName());
-		entity.setLastName(dto.getLastName());
+		entity.setName(dto.getName());
+		entity.setCpf(dto.getCpf());
+		entity.setPhone(dto.getPhone());
 		return entity;
 	}
 	
 	private PersonDto convertEntityToDto(Person entity) {
 		PersonDto dto = new PersonDto();
 		dto.setId(entity.getId());
-		dto.setFirstName(entity.getFirstName());
-		dto.setLastName(entity.getLastName());
+		dto.setName(entity.getName());
+		dto.setCpf(entity.getCpf());
+		dto.setPhone(entity.getPhone());
 		return dto;
 	}
 	
 	private PersonDto salvePerson(PersonDto personDto) {
 		Person person = convertDtoToEntity(personDto);
 		person = repository.save(person);
-		
 		return convertEntityToDto(person);
 	}
 

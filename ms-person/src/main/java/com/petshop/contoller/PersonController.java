@@ -1,7 +1,7 @@
 package com.petshop.contoller;
 
+import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -62,7 +62,7 @@ public class PersonController {
 		List<PersonDto> people = service.findAll();
 		
 		if (people.isEmpty()) {
-			return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+			return ResponseEntity.ok(Collections.emptyList());
 		}
 		
 		List<PersonResponse> response = people.stream()
@@ -74,13 +74,9 @@ public class PersonController {
 	
 	@GetMapping("/{id}")
 	public ResponseEntity<PersonResponseDetails> findPersonById(@PathVariable String id) {
-		Optional<PersonDto> person = service.findPersonById(id);
+		PersonDto person = service.findPersonById(id);
 		
-		if(person.isPresent()) {
-			return new ResponseEntity<>(convertDtoToResponseDetails(person.get()) ,HttpStatus.OK);
-		}
-		
-		return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+		return new ResponseEntity<>(convertDtoToResponseDetails(person) ,HttpStatus.OK);
 	}
 	
 	@PutMapping("/{id}")
@@ -99,24 +95,27 @@ public class PersonController {
 	
 	private PersonDto convertRequestToDto(PersonRequest request) {
 		PersonDto dto = new PersonDto();
-		dto.setFirstName(request.getFirstName());
-		dto.setLastName(request.getLastName());
+		dto.setName(request.getName());
+		dto.setCpf(request.getCpf());
+		dto.setPhone(request.getPhone());
 		return dto;
 	}
 	
 	private PersonResponse convertDtoToResponse(PersonDto dto) {
 		PersonResponse response = new PersonResponse();
 		response.setId(dto.getId());
-		response.setFirstName(dto.getFirstName());
-		response.setLastName(dto.getLastName());
+		response.setName(dto.getName());
+		response.setCpf(dto.getCpf());
+		response.setPhone(dto.getPhone());
 		return response;
 	}
 	
 	private PersonResponseDetails convertDtoToResponseDetails(PersonDto dto) {
 		PersonResponseDetails response = new PersonResponseDetails();
 		response.setId(dto.getId());
-		response.setFirstName(dto.getFirstName());
-		response.setLastName(dto.getLastName());
+		response.setName(dto.getName());
+		response.setCpf(dto.getCpf());
+		response.setPhone(dto.getPhone());
 		response.setAnimals(dto.getAnimals());
 		return response;
 	}

@@ -8,21 +8,12 @@ public class Animal {
 	
 	@Id
 	private String id;
-	
 	private String name;
-	
 	private Integer age;
-	
 	private String breed;
-	
 	private boolean alive;
-	
 	private String guardian;
 	
-    public Animal() {
-        setAlive(true);
-    }
-
 	public String getId() {
 		return id;
 	}
