@@ -4,6 +4,8 @@
 
 Responsável por cadastrar animais e tutores
 
+Repositório com o projeto front-end [petshop-frontend](https://github.com/santosjennifer/petshop-frontend) desenvolvido em React.
+
 ### Repositório com os serviços eureka-server, gateway-server, ms-pet e ms-person
 
 - **eureka-server:** responsável por registrar e gerenciar a comunicação dos demais microserviços (gateway-server, ms-person e ms-pet).
