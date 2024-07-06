@@ -5,8 +5,9 @@ import java.util.List;
 public class PersonDto {
 
 	private String id;
-	private String firstName;
-	private String lastName;
+	private String name;
+	private String cpf;
+	private String phone;
 	private List<AnimalDto> animals;
 	
 	public String getId() {
@@ -15,17 +16,23 @@ public class PersonDto {
 	public void setId(String id) {
 		this.id = id;
 	}
-	public String getFirstName() {
-		return firstName;
+	public String getName() {
+		return name;
 	}
-	public void setFirstName(String firstName) {
-		this.firstName = firstName;
+	public void setName(String name) {
+		this.name = name;
 	}
-	public String getLastName() {
-		return lastName;
+	public String getCpf() {
+		return cpf;
 	}
-	public void setLastName(String lastName) {
-		this.lastName = lastName;
+	public void setCpf(String cpf) {
+		this.cpf = cpf;
+	}
+	public String getPhone() {
+		return phone;
+	}
+	public void setPhone(String phone) {
+		this.phone = phone;
 	}
 	public List<AnimalDto> getAnimals() {
 		return animals;

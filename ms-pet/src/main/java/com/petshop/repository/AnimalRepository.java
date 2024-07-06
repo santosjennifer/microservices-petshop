@@ -8,8 +8,8 @@ import org.springframework.stereotype.Repository;
 import com.petshop.model.Animal;
 
 @Repository
-public interface AnimalRepository extends MongoRepository<Animal, String>{
-	
+public interface AnimalRepository extends MongoRepository<Animal, String> {
+
 	List<Animal> findByGuardian(String id);
 
 }
